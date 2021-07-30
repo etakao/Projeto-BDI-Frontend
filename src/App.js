@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
-import {Forms} from "./pages/Forms.js";
+import { Forms } from "./pages/Forms";
 
 function App() {
   return (

@@ -4,18 +4,19 @@
   justify-content: center;
   flex-direction: column;
 
-  height: 160px;
   background: #988bc7;
   border-radius: 0px 0px 8px 8px;
 
   font-family: "Inter", sans-serif;
 
   h2 {
+    padding-top: 16px;
     font-size: 36px;
     font-weight: 700;
   }
 
   p {
+    padding-bottom: 16px;
     font-size: 24px;
     font-weight: 400;
   }

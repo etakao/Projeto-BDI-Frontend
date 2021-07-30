@@ -1,6 +1,6 @@
 import React from 'react';
 
-import '../styles/forms.scss';
+import './styles.scss';
 
 export function Forms() {
   return (
