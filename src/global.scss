@@ -15,3 +15,8 @@ button,
 textarea {
   font: 400 16px "Inter", sans-serif;
 }
+
+button,
+input[type="checkbox"]:hover {
+  cursor: pointer;
+}
