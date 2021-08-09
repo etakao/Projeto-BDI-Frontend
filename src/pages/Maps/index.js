@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Map, TileLayer } from 'react-leaflet';
-
+import { MapContainer, TileLayer } from 'react-leaflet';
 import { FiExternalLink, FiMenu } from 'react-icons/fi';
+
+import { CreateCaption } from './captions.js';
 
 import 'leaflet/dist/leaflet.css';
 import './styles.scss';
@@ -12,7 +13,7 @@ export function Maps() {
 
   return (
     <div id="maps">
-      <Map
+      <MapContainer
         center={[-22.1214431, -51.4135095]}
         zoom={12}
         style={{ width: '100%', height: '100%' }}
@@ -20,8 +21,8 @@ export function Maps() {
         <TileLayer
           url={`https://api.mapbox.com/styles/v1/mapbox/dark-v10/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.REACT_APP_MAPBOX_TOKEN}`}
         />
-      </Map>
-
+      </MapContainer>
+     
       <aside className={isSidebarVisible ? "" : "invisible-sidebar"}>
         <header>
           <FiMenu onClick={() => setIsSidebarVisible(false)} />
@@ -70,6 +71,8 @@ export function Maps() {
       <div className={isSidebarVisible ? "invisible-toggle" : "toggle-sidebar"} onClick={() => setIsSidebarVisible(true)}>
         <FiMenu />
       </div>
+      
+      <CreateCaption />
     </div>
   );
 }

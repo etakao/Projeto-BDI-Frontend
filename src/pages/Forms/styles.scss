@@ -1,23 +1,112 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
 #header {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
 
-  background: #988bc7;
+  background: var(--light-background;
   border-radius: 0px 0px 8px 8px;
 
   font-family: "Inter", sans-serif;
 
   h2 {
     padding-top: 16px;
-    font-size: 36px;
+    font-size: 28px;
     font-weight: 700;
   }
 
   p {
     padding-bottom: 16px;
-    font-size: 24px;
     font-weight: 400;
+  }
+}
+
+.forms {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+::-webkit-calendar-picker-indicator {
+  filter: invert(80%);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+
+  font-weight: 600;
+  font-size: 20px;
+
+  span {
+    padding: 18px 0 8px 0;
+  }
+
+  input {
+    background-color: transparent;
+    border: 1px solid var(--text);
+    border-radius: 8px;
+    color: var(--text);
+    fill: var(--text);
+
+    &:not(:first-child) {
+      padding: 4px 4px;
+    }
+
+    font-weight: 500;
+    font-size: 16px;
+
+    &:focus {
+      outline: none;
+      border-color: var(--link);
+    }
+  }
+
+  .infectionPeriod {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .checkboxClass {
+    padding: 8px 0;
+
+    font-weight: normal;
+    font-size: 18px;
+
+    input[type="checkbox"] {
+      margin-right: 16px;
+    }
+
+    a {
+      color: var(--text);
+    }
+  }
+
+  button {
+    margin-top: 16px;
+    height: 60px;
+
+    background: var(--light-background);
+    border: none;
+    border-radius: 8px;
+    color: var(--text);
+
+    font-weight: 600;
+    font-size: 24px;
+
+    transition: filter 0.3s;
+
+    &:hover {
+      filter: brightness(0.8);
+    }
   }
 }
