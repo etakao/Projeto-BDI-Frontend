@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { MapContainer, TileLayer } from 'react-leaflet';
-
 import { FiExternalLink, FiMenu } from 'react-icons/fi';
+
+import { CreateCaption } from './captions.js';
 
 import 'leaflet/dist/leaflet.css';
 import './styles.scss';
-import './captions.js';
-import { CreateCaption } from './captions.js';
 
 export function Maps() {
   const [selectedCity, setSelectedCity] = useState('presidente-prudente');
@@ -23,12 +22,11 @@ export function Maps() {
           url={`https://api.mapbox.com/styles/v1/mapbox/dark-v10/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.REACT_APP_MAPBOX_TOKEN}`}
         />
       </MapContainer>
-      
+     
       <aside className={isSidebarVisible ? "" : "invisible-sidebar"}>
         <header>
           <FiMenu onClick={() => setIsSidebarVisible(false)} />
           <h1>Covid em foco</h1>
-          
         </header>
 
         <main>
@@ -69,10 +67,11 @@ export function Maps() {
           <span>Direitos reservados</span>
         </footer>
       </aside>
-     
+
       <div className={isSidebarVisible ? "invisible-toggle" : "toggle-sidebar"} onClick={() => setIsSidebarVisible(true)}>
         <FiMenu />
       </div>
+      
       <CreateCaption />
     </div>
   );
