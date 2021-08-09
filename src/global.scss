@@ -1,0 +1,24 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --text: #e1e1e6;
+  --link: #78D1E1;
+  --background: #191622;
+  --light-background: #988BC7;
+}
+
+body {
+  background: var(--background);
+  color: var(--text);
+}
+
+body,
+input,
+button,
+textarea {
+  font: 400 16px "Inter", sans-serif;
+}

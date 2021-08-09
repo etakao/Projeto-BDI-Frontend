@@ -1,0 +1,151 @@
+#maps {
+  width: 100vw;
+  height: 100vh;
+
+  position: relative;
+
+  aside {
+    position: fixed;
+    width: 320px;
+    height: 100vh;
+    top: 0;
+    right: 0;
+    padding: 32px;
+    background-color: rgba($color: #191622, $alpha: 0.9);
+    border-bottom-left-radius: 12px;
+    border-top-left-radius: 12px;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    z-index: 10;
+
+    transition: 0.5s;
+
+    header {
+      display: flex;
+      align-items: center;
+      
+      svg {
+        font-size: 20px;
+        cursor: pointer;
+        margin-right: 16px;
+
+        transition: filter 0.2s;
+
+        &:hover {
+          filter: brightness(0.8);
+        }
+      }
+
+      h1 {
+        font-size: 18px;
+        font-weight: 600;
+        line-height: 32px;
+      }
+    }
+
+    main {
+      .city-selection {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 20px;
+
+        label {
+          margin-bottom: 10px;
+        }
+        
+        select {
+          background: none;
+          color: var(--text);
+          padding: 6px;
+          border-radius: 8px;
+  
+          option {
+            background-color: var(--background);
+          }
+        }
+      }
+
+      .city-info {
+        h2, h3 {
+          font-size: 16px;
+          font-weight: 600;
+          line-height: 32px;
+        }
+
+        p {
+          font-size: 16px;
+          line-height: 24px;
+          margin-bottom: 4px;
+        }
+
+        hr {
+          margin: 6px 0;
+        }
+      }
+    }
+
+    footer {
+      display: flex;
+      flex-direction: column;
+    
+      line-height: 32px;
+
+      a {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: var(--link);
+        margin-bottom: 20px;
+
+        transition: filter 0.2s;
+
+        &:hover {
+          filter: brightness(0.8);
+        }
+        
+        svg {
+          margin-left: 8px;
+        }
+      }
+
+      span {
+        align-self: flex-end;
+        font-size: 14px;
+      }
+    }
+  }
+
+  .invisible-sidebar {
+    right: -320px;
+  }
+
+  .invisible-toggle {
+    display: none;
+  }
+
+  .toggle-sidebar {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: var(--background);
+
+    transition: filter 0.2s;
+
+    &:hover {
+      filter: brightness(0.8);
+    }
+  }
+}
+
+#maps .leaflet-container {
+  z-index: 0;
+}
