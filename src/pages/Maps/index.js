@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, CircleMarker, Popup } from 'react-leaflet';
-import { FiExternalLink, FiMenu,FiAlertCircle } from 'react-icons/fi';
+import { FiExternalLink, FiMenu, FiAlertCircle } from 'react-icons/fi';
 import Geocode from 'react-geocode';
 
-import { CreateCaption } from '../../components/Captions/index.js';
+import { Timeline } from '../../components/Timeline';
+import { Legend } from '../../components/Legend';
 
 import { cities } from '../../database 13-01';
 import { boletim } from '../../boletim';
@@ -18,17 +19,18 @@ export function Maps() {
   const year = atualDate.getFullYear()*/
 
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
+  const [isTimelineVisible, setIsTimelineVisible] = useState(false);
   const [selectedCity, setSelectedCity] = useState("");
   const [activeCep, setActiveCep] = useState("");
   const [activeCoord, setActiveCoord] = useState("");
   const [reportCard, setReportCard] = useState("");
   //const [date, setDate]= useState(`${year}-${month}-${day}`)
-  const [date,setDate] = useState('2022-01-24');
+  const [date, setDate] = useState('2022-01-24');
 
   const [citiesCoord, setCitiesCoord] = useState([]);
   const [citiesReport, setCitiesReport] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  
+
   Geocode.setApiKey(process.env.REACT_APP_GOOGLE_TOKEN);
   Geocode.setLanguage("pt-br");
   Geocode.setRegion("br");
@@ -43,7 +45,7 @@ export function Maps() {
   };
 
   function handleRadiusStatus(status) {
-    switch (status){
+    switch (status) {
       case 1:
         return 10;
       case 2:
@@ -54,38 +56,38 @@ export function Maps() {
         return 22;
       case 5:
         return 26;
-      default:   
+      default:
         return 5;
     }
   }
-  
-  function selectedRisk(status){
-    switch (status){
+
+  function selectedRisk(status) {
+    switch (status) {
       case 1:
-        return("#78D1E1")
+        return ("#78D1E1")
       case 2:
-        return("#67E480")
+        return ("#67E480")
       case 3:
-        return("#E7DE79")
+        return ("#E7DE79")
       case 4:
-        return("#E89E64")
+        return ("#E89E64")
       case 5:
-        return("#E96379")
-      default:   
-        return("#78D1E1")
+        return ("#E96379")
+      default:
+        return ("#78D1E1")
     }
   }
 
-  function defaultOption(date){
-    const auxReportCard = boletim.reduce((auxReportCard,RCpos) =>{
-      if(RCpos.data === date){
+  function defaultOption(date) {
+    const auxReportCard = boletim.reduce((auxReportCard, RCpos) => {
+      if (RCpos.data === date) {
         auxReportCard.confirmados = auxReportCard.confirmados + RCpos.confirmados;
-        auxReportCard.total_confirmados= auxReportCard.total_confirmados + RCpos.total_confirmados;
-        auxReportCard.total_obtios = auxReportCard.total_obtios+ RCpos.total_obtios;
+        auxReportCard.total_confirmados = auxReportCard.total_confirmados + RCpos.total_confirmados;
+        auxReportCard.total_obtios = auxReportCard.total_obtios + RCpos.total_obtios;
         auxReportCard.total_vacinados = auxReportCard.total_vacinados + RCpos.total_vacinados;
       }
-      return(auxReportCard)
-    }, { 
+      return (auxReportCard)
+    }, {
       id: 0,
       codigo_ibge: '',
       data: date,
@@ -101,7 +103,7 @@ export function Maps() {
   function changeSelectedCity(cep) {
     setSelectedCity(citiesReport.find(city => city.cep === cep))
   };
-  
+
   async function getCityCoord(cep) {
     if (cep !== "") {
       const response = await Geocode.fromAddress(cep);
@@ -116,7 +118,7 @@ export function Maps() {
 
     defaultOption(date);
 
-    const filteredCities = boletim.filter(city => 
+    const filteredCities = boletim.filter(city =>
       city.data === date
     );
     setCitiesReport(filteredCities);
@@ -124,7 +126,7 @@ export function Maps() {
     for (const city of filteredCities) {
       promises.push(getCityCoord(city.cep));
     }
-    
+
     Promise.all(promises).then(response => {
       setCitiesCoord(response);
       setIsLoading(false);
@@ -143,7 +145,7 @@ export function Maps() {
   useEffect(() => {
     if (selectedCity) {
       console.log(citiesReport)
-      setReportCard(citiesReport.find(city => 
+      setReportCard(citiesReport.find(city =>
         city.codigo_ibge === selectedCity.codigo_ibge
       ));
     }
@@ -164,7 +166,7 @@ export function Maps() {
           <Popup>{selectedCity.name}</Popup>
         </CircleMarker>
       );
-    } 
+    }
   }
 
   return (
@@ -176,8 +178,8 @@ export function Maps() {
       >
         <TileLayer
           url={`https://api.mapbox.com/styles/v1/mapbox/dark-v10/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.REACT_APP_MAPBOX_TOKEN}`}
-        />        
-        
+        />
+
         {putMapMark()}
 
         {(!isLoading && (activeCep === "")) &&
@@ -196,7 +198,7 @@ export function Maps() {
             );
           })
         }
-         
+
       </MapContainer>
       <aside className={isSidebarVisible ? "" : "invisible-sidebar"}>
         <header>
@@ -236,25 +238,25 @@ export function Maps() {
             </div>
             <div className="info-container">
               <p>População estimada: </p>
-              <p>{selectedCity ?  selectedCity.populacao_estimada: 0 }</p>
+              <p>{selectedCity ? selectedCity.populacao_estimada : 0}</p>
             </div>
           </div>
-          
+
           <div className="city-info">
             <h2>Boletim</h2>
             <hr />
             <div className="info-container">
-                <p>Data:</p> 
-                <input type='date'key="date" onChange={e => setDate(e.target.value)} value={date}/>
+              <p>Data:</p>
+              <input type='date' key="date" onChange={e => setDate(e.target.value)} value={date} />
             </div>
             <div className="info-container">
-                <p>Confirmados: </p>
-                <p>{reportCard ? reportCard.confirmados : 0}</p>
+              <p>Confirmados: </p>
+              <p>{reportCard ? reportCard.confirmados : 0}</p>
             </div>
             <div className="info-container">
-                <p>Óbitos: </p>
+              <p>Óbitos: </p>
             </div>
-            <a href="/forms" className='aside-link'>Ver mais Informações <FiAlertCircle/></a>
+            <a href="/forms" className='aside-link'>Ver mais Informações <FiAlertCircle /></a>
           </div>
 
           <div className="city-info">
@@ -271,12 +273,12 @@ export function Maps() {
           <span>Direitos reservados</span>
         </footer>
       </aside>
-      
+
       <div className={isSidebarVisible ? "invisible-toggle" : "toggle-sidebar"} onClick={() => setIsSidebarVisible(true)}>
         <FiMenu />
       </div>
 
-      <CreateCaption />
+      <Legend />
       <Timeline isTimelineVisible={isTimelineVisible} setIsTimelineVisible={setIsTimelineVisible} />
     </div>
   );

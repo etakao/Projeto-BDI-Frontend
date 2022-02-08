@@ -3,7 +3,7 @@ import Chart from 'react-apexcharts';
 
 import { FiBarChart2, FiChevronDown } from 'react-icons/fi';
 
-import './timeline.scss';
+import './styles.scss';
 
 export function Timeline({ isTimelineVisible, setIsTimelineVisible }) {
   function setChosenDate(e) {
