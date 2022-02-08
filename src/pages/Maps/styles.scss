@@ -25,7 +25,7 @@
     header {
       display: flex;
       align-items: center;
-      
+      padding-bottom: 10px;
       svg {
         font-size: 20px;
         cursor: pointer;
@@ -39,7 +39,7 @@
       }
 
       h1 {
-        font-size: 18px;
+        font-size: 20px;
         font-weight: 600;
         line-height: 32px;
       }
@@ -52,7 +52,7 @@
         margin-bottom: 20px;
 
         label {
-          margin-bottom: 10px;
+          margin-bottom: 8px;
         }
         
         select {
@@ -68,22 +68,56 @@
       }
 
       .city-info {
+        padding-bottom: 10px;
         h2, h3 {
-          font-size: 16px;
+          font-size: 17px;
           font-weight: 600;
-          line-height: 32px;
+          line-height: 18px;
+          margin:0;
+          padding:0;
         }
 
         p {
-          font-size: 16px;
+          font-size: 14px;
           line-height: 24px;
-          margin-bottom: 4px;
+          margin:1px;
+          padding:0px;
+          
         }
 
         hr {
           margin: 6px 0;
         }
       }
+      .info-container{
+        display: flex;
+        width: 100%;
+        align-items: center;
+        padding-bottom: 3px;
+        p{
+          margin:0;
+          padding:0;
+        }
+        input[type=checkbox]{
+          border-radius: 50%;
+          background: none;
+          color: transparent;
+          border: 1px solid var(--text);
+      }
+        input[type=date]{
+          margin-left: 10px;
+          width: 140px;
+          
+          padding:2px 5px;
+          font-size: 13px;
+          border: 1px solid var(--text);
+          border-radius: 8px;
+          color:var(--text);
+          background-color: var(--background);
+          
+        }
+      }
+    
     }
 
     footer {
@@ -92,23 +126,6 @@
     
       line-height: 32px;
 
-      a {
-        display: flex;
-        align-items: center;
-        text-decoration: none;
-        color: var(--link);
-        margin-bottom: 20px;
-
-        transition: filter 0.2s;
-
-        &:hover {
-          filter: brightness(0.8);
-        }
-        
-        svg {
-          margin-left: 8px;
-        }
-      }
 
       span {
         align-self: flex-end;
@@ -142,6 +159,23 @@
 
     &:hover {
       filter: brightness(0.8);
+    }
+  }
+  .aside-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: var(--link);
+    margin-bottom: 0;
+    font-size: 14px;
+    transition: filter 0.2s;
+    padding: 3px 3px 4px 0;
+    &:hover {
+      filter: brightness(0.8);
+    }
+    
+    svg {
+      margin-left: 8px;
     }
   }
 }
