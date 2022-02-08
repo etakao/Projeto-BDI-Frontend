@@ -4,6 +4,7 @@ import { FiExternalLink, FiMenu } from 'react-icons/fi';
 import Geocode from 'react-geocode';
 
 import { CreateCaption } from './captions.js';
+import { Timeline } from './timeline';
 
 import { cities } from '../../database';
 
@@ -12,6 +13,7 @@ import './styles.scss';
 
 export function Maps() {
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
+  const [isTimelineVisible, setIsTimelineVisible] = useState(false);
   const [selectedCity, setSelectedCity] = useState("");
   const [activeCep, setActiveCep] = useState("");
   const [activeCoord, setActiveCoord] = useState("");
@@ -124,6 +126,7 @@ export function Maps() {
       </div>
 
       <CreateCaption />
+      <Timeline isTimelineVisible={isTimelineVisible} setIsTimelineVisible={setIsTimelineVisible} />
     </div>
   );
 }
