@@ -1,0 +1,67 @@
+.timeline-container {
+  position: fixed;
+  left: 50%;
+  transform: translate(-50%, 0);
+  bottom: 10px;
+
+  width: auto;
+  z-index: 10;
+  border-radius: 8px;
+  background-color: rgba($color: #191622, $alpha: 0.9);
+
+  transition: 0.5s;
+
+  .toggle-timeline {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    border-radius: 8px;
+    background-color: var(--background);
+
+    transition: filter 0.2s;
+
+    &:hover {
+      filter: brightness(0.8);
+    }
+  }
+  
+  .timeline {
+    padding-top: 6px;
+  
+    .apexcharts-tooltip {
+      background: var(--text);
+      color: var(--background);
+    }
+  }
+}
+
+.invisible-timeline {
+  display: none;
+}
+
+.invisible-toggle {
+  display: none;
+}
+
+.visible-toggle {
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  transform: translate(-50%, 0);
+
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: var(--background);
+
+  transition: filter 0.2s;
+
+  &:hover {
+    filter: brightness(0.8);
+  }
+}

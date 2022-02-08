@@ -202,6 +202,7 @@ export function Maps() {
         <header>
           <FiMenu onClick={() => setIsSidebarVisible(false)} />
           <h1>Covid em Foco</h1>
+
         </header>
         <main>
           <div className="city-selection">
@@ -238,6 +239,7 @@ export function Maps() {
               <p>{selectedCity ?  selectedCity.populacao_estimada: 0 }</p>
             </div>
           </div>
+          
           <div className="city-info">
             <h2>Boletim</h2>
             <hr />
@@ -269,10 +271,13 @@ export function Maps() {
           <span>Direitos reservados</span>
         </footer>
       </aside>
+      
       <div className={isSidebarVisible ? "invisible-toggle" : "toggle-sidebar"} onClick={() => setIsSidebarVisible(true)}>
         <FiMenu />
       </div>
+
       <CreateCaption />
+      <Timeline isTimelineVisible={isTimelineVisible} setIsTimelineVisible={setIsTimelineVisible} />
     </div>
   );
 }
