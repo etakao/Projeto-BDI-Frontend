@@ -35,15 +35,6 @@ export function Maps() {
   Geocode.setLanguage("pt-br");
   Geocode.setRegion("br");
 
-  async function convertCepToCoord(cep) {
-    if (cep !== "") {
-      const response = await Geocode.fromAddress(cep);
-      if (response.status === "OK") {
-        setActiveCoord(response.results[0].geometry.location);
-      }
-    }
-  };
-
   function handleRadiusStatus(status) {
     switch (status) {
       case 1:
@@ -137,14 +128,15 @@ export function Maps() {
 
   useEffect(() => {
     changeSelectedCity(activeCep);
-    convertCepToCoord(activeCep);
+    Promise.resolve(getCityCoord(activeCep)).then(response => {
+      setActiveCoord(response);
+    });
 
     // eslint-disable-next-line
   }, [activeCep]);
 
   useEffect(() => {
     if (selectedCity) {
-      console.log(citiesReport)
       setReportCard(citiesReport.find(city =>
         city.codigo_ibge === selectedCity.codigo_ibge
       ));
@@ -204,7 +196,6 @@ export function Maps() {
         <header>
           <FiMenu onClick={() => setIsSidebarVisible(false)} />
           <h1>Covid em Foco</h1>
-
         </header>
         <main>
           <div className="city-selection">
@@ -225,20 +216,16 @@ export function Maps() {
             <h2>{activeCep ? "Dados Completos" : "Dados Gerais"}</h2>
             <hr />
             <div className="info-container">
-              <p>Total de casos: </p>
-              <p>{reportCard ? reportCard.total_confirmados : 0}</p>
+              <p>Total de casos: {reportCard ? reportCard.total_confirmados : 0}</p>
             </div>
             <div className="info-container">
-              <p>Total de óbitos: </p>
-              <p>{reportCard ? reportCard.total_obtios : 0}</p>
+              <p>Total de óbitos: {reportCard ? reportCard.total_obtios : 0}</p>
             </div>
             <div className="info-container">
-              <p>Total de vacinados: </p>
-              <p>{reportCard ? reportCard.total_vacinados : 0}</p>
+              <p>Total de vacinados: {reportCard ? reportCard.total_vacinados : 0}</p>
             </div>
             <div className="info-container">
-              <p>População estimada: </p>
-              <p>{selectedCity ? selectedCity.populacao_estimada : 0}</p>
+              <p>População estimada: {selectedCity ? selectedCity.populacao_estimada : 0}</p>
             </div>
           </div>
 
@@ -250,11 +237,13 @@ export function Maps() {
               <input type='date' key="date" onChange={e => setDate(e.target.value)} value={date} />
             </div>
             <div className="info-container">
-              <p>Confirmados: </p>
-              <p>{reportCard ? reportCard.confirmados : 0}</p>
+              <p>Casos: {reportCard ? reportCard.confirmados_diario : 0}</p>
             </div>
             <div className="info-container">
-              <p>Óbitos: </p>
+              <p>Óbitos: {reportCard ? reportCard.obitos_diarios : 0}</p>
+            </div>
+            <div className="info-container">
+              <p>Vacinados: {reportCard ? reportCard.vacinados_diarios : 0}</p>
             </div>
             <a href="/forms" className='aside-link'>Ver mais Informações <FiAlertCircle /></a>
           </div>

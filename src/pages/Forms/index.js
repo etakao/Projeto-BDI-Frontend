@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 
+import { cities } from '../../database 13-01';
+
 import "./styles.scss";
 
 export function Forms() {
-  const [name, setName] = useState("");
+  const [nome, setNome] = useState("");
   const [cpf, setCpf] = useState("");
-  const [birthDate, setBirthDate] = useState("");
-  const [cep, setCep] = useState("");
+  const [data_nascimento, setData_nascimento] = useState("");
+  const [codigo_ibge, setCodigo_ibge] = useState("");
+  const [is_vacinado, setIs_vacinado] = useState("");
   const [doses, setDoses] = useState("");
   const [dosesDate, setDosesDate] = useState([
     {
@@ -22,12 +25,7 @@ export function Forms() {
       date: ""
     },
   ]);
-  const [infectionPeriod, setInfectionPeriod] = useState({
-    from: "",
-    to: ""
-  });
-  const [death, setDeath] = useState("");
-
+  const [death, setIs_obito] = useState("");
 
   function handleDoses(index, date) {
     const newDosesDate = [...dosesDate];
@@ -35,27 +33,23 @@ export function Forms() {
     setDosesDate(newDosesDate);
   }
 
-  function handlePeriod(flag, date) {
-    setInfectionPeriod({ ...infectionPeriod, [flag]: date });
-  }
-
   function handleSubmit(e) {
     e.preventDefault();
 
-    console.log(name, cpf, birthDate, cep, doses, dosesDate, infectionPeriod, death);
+    console.log(nome, cpf, data_nascimento, codigo_ibge, doses, dosesDate, death);
   }
 
   return (
     <div className="container">
       <div id="header">
-        <h2>Cadastro de morador | Covid em Foco</h2>
+        <h2>Cadastro de morador infectado | Covid em Foco</h2>
       </div>
       <form onSubmit={handleSubmit}>
         <label htmlFor="name">Nome</label>
         <input
           type="text"
           id="name"
-          onChange={e => setName(e.target.value)}
+          onChange={e => setNome(e.target.value)}
         />
 
         <div className="double-column">
@@ -73,17 +67,22 @@ export function Forms() {
             <input
               type="date"
               id="birth-date"
-              onChange={e => setBirthDate(e.target.value)}
+              onChange={e => setData_nascimento(e.target.value)}
             />
           </div>
         </div>
 
-        <label htmlFor="cep">CEP</label>
-        <input
-          type="text"
-          id="cep"
-          onChange={e => setCep(e.target.value)}
-        />
+        <label htmlFor="select-city">Cidade</label>
+        <select
+          id="select-city"
+          value={activeCep}
+          onChange={e => setCodigo_ibge(e.target.value)}
+        >
+          <option key={'deafult'} value="" >Selecione uma cidade</option>
+          {cities.map(city => (
+            <option key={city.cep} value={city.cep}>{city.name}</option>
+          ))}
+        </select>
 
         <label htmlFor="doses">N° de doses</label>
         <div className="doses-section">
@@ -107,14 +106,6 @@ export function Forms() {
           </div>
         </div>
 
-        <label htmlFor="time">Período de infecção</label>
-        <div className="period-section">
-          <span>De</span>
-          <input type="date" onChange={e => handlePeriod("from", e.target.value)} />
-          <span>à</span>
-          <input type="date" onChange={e => handlePeriod("to", e.target.value)} />
-        </div>
-
         <label htmlFor="death">Óbito</label>
         <div className="death-section">
           <div>
@@ -123,7 +114,7 @@ export function Forms() {
               id="opt1"
               name="obito"
               value={1}
-              onChange={e => setDeath(e.target.value)}
+              onChange={e => setIs_obito(e.target.value)}
             />
             <label htmlFor="opt1">Sim</label>
             <input
@@ -131,16 +122,10 @@ export function Forms() {
               id="opt2"
               name="obito"
               value={0}
-              onChange={e => setDeath(e.target.value)}
+              onChange={e => setIs_obito(e.target.value)}
             />
             <label htmlFor="opt2">Não</label>
           </div>
-          {death === "1" ? (
-            <div>
-              <label htmlFor="death-date">Data:</label>
-              <input type="date" />
-            </div>
-          ) : ""}
         </div>
 
         <div className="checkboxClass">
