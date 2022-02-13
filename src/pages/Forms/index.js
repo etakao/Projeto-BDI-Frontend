@@ -75,7 +75,7 @@ export function Forms() {
         <label htmlFor="select-city">Cidade</label>
         <select
           id="select-city"
-          value={activeCep}
+          value={codigo_ibge}
           onChange={e => setCodigo_ibge(e.target.value)}
         >
           <option key={'deafult'} value="" >Selecione uma cidade</option>
