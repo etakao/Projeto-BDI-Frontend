@@ -1,83 +1,71 @@
 import React, { useState } from 'react';
-import { Redirect, useHistory} from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
 
-//import { message } from 'antd';
-//import api from "../../services/api";
-//import { login, isAuthenticated} from "../../services/auth";
+import { login, isAuthenticated, authApi } from "../../services/auth";
 
-//import { useUser } from '../../contexts/User';
+import { useUser } from '../../contexts/user';
 
 import './styles.scss';
 
-export  function Login(){
-   
-    //const history = useHistory();
-   // const {user, setUser}= useUser();
-    const [user, setUser] = useState("");
+export function Login() {
+    const history = useHistory();
+    const { setUser } = useUser();
     const [email, setEmail] = useState('');
-    const [password,setPassword] = useState('');
+    const [password, setPassword] = useState('');
 
-    const handleSubmit = async event =>{
+    const handleSubmit = async event => {
         event.preventDefault();
-        if(email ==='admin@admin.com' && password === '123'){
-            alert("bem vindo "+ user);
+
+        try {
+            const response = await authApi.login({
+                email,
+                password
+            });
+            if (response.status === 200) {
+                login(response.data.token);
+                setUser(response.data);
+            }
+            history.push("/forms");
+
+        } catch (err) {
+            console.log(err);
         }
-        // message.loading({
-        //     key: "logging",
-        //     content: "Logando...",
-        //     duration: 9999
-        //   });
-
-    //       try {
-    //         const response = await api.post("/login", { email, password });
-    //             login(response.data.token)
-    //             const users = response.data;
-                
-    //             message.destroy("logging");
-    //             console.log(user);
-    //             history.push("/forms");
-    //             message.success("Bem-vindo!");
-               
-    //       } catch (err) {
-    //         console.log(err);
-    //         message.destroy("logging");
-    //         message.error("Erro ao efetuar login, tente novamete...");
-    //       }
-     }
-     //{isAuthenticated() ? <Redirect to="/forms" /> : null}
-    return(
+    }
+    return (
         <>
- 
-        <section className="login">
-            <div className='container'>
-                <div className="title-login">
-                <h1> Covid em foco</h1>
-                <div className="break"/>
-                    <h1> Login</h1>
-                </div>
-                <form className="form-login" onSubmit={handleSubmit}> 
-                    <div className="section-form">
-                        <label>E-mail</label>
-                        <input type="email" 
-                        name='email'  
-                        onChange={e => setEmail(e.target.value)} 
-                        required={true}/>
-                        
+            {isAuthenticated() ? (
+                <Redirect to="/forms" />
+            ) : (<section className="login">
+                <div className='container'>
+                    <div className="title-login">
+                        <h1> Covid em foco</h1>
+                        <div className="break" />
+                        <h1> Login</h1>
                     </div>
-                    <div className="section-form">
-                        <label> Senha </label>
-                        <input type="password" 
-                        name='password'  
-                        onChange={e => setPassword(e.target.value)} 
-                        required={true}/>
+                    <form className="form-login" onSubmit={handleSubmit}>
+                        <div className="section-form">
+                            <label>E-mail</label>
+                            <input type="email"
+                                name='email'
+                                onChange={e => setEmail(e.target.value)}
+                                required={true} />
 
-                    </div>
-                    <div className="section-form">
-                        <button type="submit">Entrar</button>
-                    </div>
-                </form>
-            </div>
-        </section>
+                        </div>
+                        <div className="section-form">
+                            <label> Senha </label>
+                            <input type="password"
+                                name='password'
+                                onChange={e => setPassword(e.target.value)}
+                                required={true} />
+
+                        </div>
+                        <div className="section-form">
+                            <button type="submit">Entrar</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+            )}
         </>
     )
 }
