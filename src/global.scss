@@ -11,6 +11,10 @@
   --light-background: #5A4B81;
 }
 
+::-webkit-calendar-picker-indicator {
+  filter: invert(80%);
+}
+
 body {
   background: var(--background);
   color: var(--text);
