@@ -1,17 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { FiLogOut } from 'react-icons/fi';
 
 import { cities } from '../../database 13-01';
+import { useUser } from '../../contexts/user';
 
 import "./styles.scss";
+import { logout } from "../../services/auth";
 
 export function Forms() {
+  const { user, removeUser } = useUser();
+
+  const [admCity, setAdmCity] = useState("");
   const [nome, setNome] = useState("");
   const [cpf, setCpf] = useState("");
-  const [data_nascimento, setData_nascimento] = useState("");
-  const [codigo_ibge, setCodigo_ibge] = useState("");
-  const [is_vacinado, setIs_vacinado] = useState("");
+  const [dataNascimento, setDataNascimento] = useState("");
   const [doses, setDoses] = useState("");
-  const [dosesDate, setDosesDate] = useState([
+  const [dataDoses, setDataDoses] = useState([
     {
       description: "1ª dose:",
       date: ""
@@ -25,24 +29,54 @@ export function Forms() {
       date: ""
     },
   ]);
-  const [death, setIs_obito] = useState("");
+  const [isObito, setIsObito] = useState("");
+
+  useEffect(() => {
+    const { adm } = user;
+    setAdmCity(cities.find(city => city.codigo_ibge === adm.codigo_ibge));
+
+    // eslint-disable-next-line
+  }, []);
 
   function handleDoses(index, date) {
-    const newDosesDate = [...dosesDate];
-    newDosesDate[index].date = date;
-    setDosesDate(newDosesDate);
+    const newdataDoses = [...dataDoses];
+    newdataDoses[index].date = date;
+    setDataDoses(newdataDoses);
   }
 
   function handleSubmit(e) {
     e.preventDefault();
 
-    console.log(nome, cpf, data_nascimento, codigo_ibge, doses, dosesDate, death);
+    console.log("Cadastro do morador:", {
+      cpf,
+      nome,
+      codigo_ibge: admCity.codigo_ibge,
+      data_nascimento: dataNascimento,
+      is_obito: parseInt(isObito)
+    });
+    console.log("Cadastro da vacina:", {
+      cpf,
+      is_vacinado: (doses > 0) ? 1 : 0,
+      numero_vacinas: parseInt(doses),
+      primeira_dose: dataDoses[0].date,
+      segunda_dose: dataDoses[1].date,
+      terceira_dose: dataDoses[2].date
+    });
+  }
+
+  function logoutUser() {
+    logout();
+    removeUser();
   }
 
   return (
     <div className="container">
       <div id="header">
         <h2>Cadastro de morador infectado | Covid em Foco</h2>
+        <h3>{admCity.nome}</h3>
+        <a onClick={logoutUser} href="/login">
+          Sair <FiLogOut />
+        </a>
       </div>
       <form onSubmit={handleSubmit}>
         <label htmlFor="name">Nome</label>
@@ -50,6 +84,7 @@ export function Forms() {
           type="text"
           id="name"
           onChange={e => setNome(e.target.value)}
+          required
         />
 
         <div className="double-column">
@@ -59,6 +94,7 @@ export function Forms() {
               type="text"
               id="cpf"
               onChange={e => setCpf(e.target.value)}
+              required
             />
           </div>
 
@@ -67,22 +103,11 @@ export function Forms() {
             <input
               type="date"
               id="birth-date"
-              onChange={e => setData_nascimento(e.target.value)}
+              onChange={e => setDataNascimento(e.target.value)}
+              required
             />
           </div>
         </div>
-
-        <label htmlFor="select-city">Cidade</label>
-        <select
-          id="select-city"
-          value={codigo_ibge}
-          onChange={e => setCodigo_ibge(e.target.value)}
-        >
-          <option key={'deafult'} value="" >Selecione uma cidade</option>
-          {cities.map(city => (
-            <option key={city.cep} value={city.cep}>{city.name}</option>
-          ))}
-        </select>
 
         <label htmlFor="doses">N° de doses</label>
         <div className="doses-section">
@@ -93,13 +118,14 @@ export function Forms() {
             <option value={3}>3</option>
           </select>
           <div className="doses-date">
-            {dosesDate.slice(0, doses).map((dose, index) => (
+            {dataDoses.slice(0, doses).map((dose, index) => (
               <div key={index} className="choose-date">
                 <label htmlFor={dose.description}>{dose.description}</label>
                 <input
                   type="date"
                   id={dose.description}
                   onChange={e => handleDoses(index, e.target.value)}
+                  required
                 />
               </div>
             ))}
@@ -114,7 +140,8 @@ export function Forms() {
               id="opt1"
               name="obito"
               value={1}
-              onChange={e => setIs_obito(e.target.value)}
+              onChange={e => setIsObito(e.target.value)}
+              required
             />
             <label htmlFor="opt1">Sim</label>
             <input
@@ -122,15 +149,15 @@ export function Forms() {
               id="opt2"
               name="obito"
               value={0}
-              onChange={e => setIs_obito(e.target.value)}
+              onChange={e => setIsObito(e.target.value)}
             />
             <label htmlFor="opt2">Não</label>
           </div>
         </div>
 
         <div className="checkboxClass">
-          <input type="checkbox" />
-          <span>Compreendo e aceito com os </span><a href="/forms">Termos e Condições do site</a>
+          <input type="checkbox" required />
+          <span>Compreendo e aceito com os </span><b>Termos e Condições do site</b>
         </div>
         <button type="submit">Cadastrar</button>
       </form>
