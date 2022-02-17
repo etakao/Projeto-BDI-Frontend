@@ -51,6 +51,8 @@ export function Timeline({ isTimelineVisible, setIsTimelineVisible, reportType, 
 
     handleDates();
     handleReportsData();
+
+    // eslint-disable-next-line
   }, [reportType, reports]);
 
   const options = {

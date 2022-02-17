@@ -71,6 +71,7 @@ export function Maps() {
       const cityReportCardResponse = await boletimApi.readByIbge(codigo_ibge);
       if (cityReportCardResponse.status === 200) {
         setCityReports(cityReportCardResponse.data.boletim);
+        console.log(cityReportCardResponse.data.boletim)
       }
     } catch (error) {
       console.log(error);
@@ -160,7 +161,7 @@ export function Maps() {
   }, [citiesReport]);
 
   useEffect(() => {
-    setSelectedCity(cities.find(city => city.cep == activeCep));
+    setSelectedCity(cities.find(city => city.cep === activeCep));
     Promise.resolve(getCityCoord(activeCep)).then(response => {
       setActiveCoord(response);
     });
@@ -271,14 +272,12 @@ export function Maps() {
               <select
                 id="select-city"
                 value={activeCep}
-                onChange={e => setActiveCep(e.target.value)}
+                onChange={e => setActiveCep(parseInt(e.target.value))}
               >
-
                 <option key={'deafult'} value="" >Selecione uma cidade</option>
                 {cities.map((city) => (
                   <option key={city.cep} value={city.cep}>{city.nome}</option>
                 ))}
-
               </select>
             </div>
 
