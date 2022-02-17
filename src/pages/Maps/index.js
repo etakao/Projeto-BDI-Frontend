@@ -126,7 +126,7 @@ export function Maps() {
 
   useEffect(() => {
     if (!isReady) {
-      loadCities()
+      loadCities();
       setIsReady(true);
     }
     // eslint-disable-next-line
@@ -371,6 +371,21 @@ export function Maps() {
         reportType={timelineContent}
         reports={cityReports}
       />
+
+      {(isLoading || !isReady) && (
+        <div className="loading-section">
+          <div className="lds-roller">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
