@@ -69,6 +69,7 @@
 
       .city-info {
         padding-bottom: 10px;
+        
         h2, h3 {
           font-size: 17px;
           font-weight: 600;
@@ -82,42 +83,40 @@
           line-height: 24px;
           margin:1px;
           padding:0px;
-          
         }
 
         hr {
           margin: 6px 0;
         }
       }
+
       .info-container{
         display: flex;
         width: 100%;
         align-items: center;
         padding-bottom: 3px;
-        p{
+
+        p {
           margin:0;
           padding:0;
         }
-        input[type=checkbox]{
-          border-radius: 50%;
-          background: none;
-          color: transparent;
-          border: 1px solid var(--text);
-      }
-        input[type=date]{
+          
+        input[type=radio] {
+          margin-right: 6px;
+        }
+
+        input[type=date] {
           margin-left: 10px;
           width: 140px;
           
-          padding:2px 5px;
+          padding: 2px 5px;
           font-size: 13px;
           border: 1px solid var(--text);
           border-radius: 8px;
-          color:var(--text);
+          color: var(--text);
           background-color: var(--background);
-          
         }
       }
-    
     }
 
     footer {
