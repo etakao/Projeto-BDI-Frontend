@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { FiLogOut } from 'react-icons/fi';
 
-import { cities } from '../../database 13-01';
 import { useUser } from '../../contexts/user';
 import { logout } from "../../services/auth";
 import moradorApi from "../../services/morador";
+import cidadeApi from "../../services/cidade";
 import vacinaApi from "../../services/vacina";
 
 import "./styles.scss";
@@ -13,6 +13,7 @@ export function Forms() {
   const { user, removeUser } = useUser();
   const [isSuccessful, setIsSuccessful] = useState(false);
 
+  const [cities, setCities] = useState([]);
   const [admCity, setAdmCity] = useState("");
   const [nome, setNome] = useState("");
   const [cpf, setCpf] = useState("");
@@ -34,12 +35,28 @@ export function Forms() {
   ]);
   const [isObito, setIsObito] = useState("");
 
+  async function loadCities() {
+    try {
+      const cityResponse = await cidadeApi.readAll();
+      if (cityResponse.status === 200) {
+        setCities(cityResponse.data.cidade);
+      }
+    }
+    catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    loadCities();
+  }, []);
+
   useEffect(() => {
     const { adm } = user;
     setAdmCity(cities.find(city => city.codigo_ibge === adm.codigo_ibge));
 
     // eslint-disable-next-line
-  }, []);
+  }, [cities]);
 
   function handleDoses(index, date) {
     const newdataDoses = [...dataDoses];
@@ -90,7 +107,9 @@ export function Forms() {
     <div className="container">
       <div id="header">
         <h2>Cadastro de morador infectado | Covid em Foco</h2>
-        <h3>{admCity.nome}</h3>
+        {admCity && (
+          <h3>{admCity.nome}</h3>
+        )}
         <a onClick={logoutUser} href="/login">
           Sair <FiLogOut />
         </a>
