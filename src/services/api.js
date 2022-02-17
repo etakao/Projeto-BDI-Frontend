@@ -2,7 +2,7 @@ import axios from 'axios';
 import { getToken } from './auth';
 
 const api = axios.create({
-  baseURL: 'https://covid-em-foco.herokuapp.com/',
+  baseURL: process.env.REACT_APP_HEROKU_URL,
 });
 
 api.interceptors.request.use(async config => {
