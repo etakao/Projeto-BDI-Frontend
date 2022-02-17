@@ -3,18 +3,21 @@ import { FiLogOut } from 'react-icons/fi';
 
 import { cities } from '../../database 13-01';
 import { useUser } from '../../contexts/user';
+import { logout } from "../../services/auth";
+import moradorApi from "../../services/morador";
+import vacinaApi from "../../services/vacina";
 
 import "./styles.scss";
-import { logout } from "../../services/auth";
 
 export function Forms() {
   const { user, removeUser } = useUser();
+  const [isSuccessful, setIsSuccessful] = useState(false);
 
   const [admCity, setAdmCity] = useState("");
   const [nome, setNome] = useState("");
   const [cpf, setCpf] = useState("");
   const [dataNascimento, setDataNascimento] = useState("");
-  const [doses, setDoses] = useState("");
+  const [doses, setDoses] = useState(0);
   const [dataDoses, setDataDoses] = useState([
     {
       description: "1ª dose:",
@@ -44,24 +47,38 @@ export function Forms() {
     setDataDoses(newdataDoses);
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
-    console.log("Cadastro do morador:", {
-      cpf,
-      nome,
-      codigo_ibge: admCity.codigo_ibge,
-      data_nascimento: dataNascimento,
-      is_obito: parseInt(isObito)
-    });
-    console.log("Cadastro da vacina:", {
-      cpf,
-      is_vacinado: (doses > 0) ? 1 : 0,
-      numero_vacinas: parseInt(doses),
-      primeira_dose: dataDoses[0].date,
-      segunda_dose: dataDoses[1].date,
-      terceira_dose: dataDoses[2].date
-    });
+    console.log(dataNascimento)
+
+    try {
+      const response = await moradorApi.create({
+        cpf,
+        nome,
+        codigo_ibge: admCity.codigo_ibge,
+        data_nascimento: dataNascimento,
+        is_obito: parseInt(isObito)
+      });
+
+      if (response.status === 200) {
+        const vacinaResponse = await vacinaApi.create({
+          cpf,
+          is_vacinado: (doses > 0) ? 1 : 0,
+          numero_vacinas: parseInt(doses),
+          primeira_dose: dataDoses[0].date,
+          segunda_dose: dataDoses[1].date,
+          terceira_dose: dataDoses[2].date
+        });
+
+        if (vacinaResponse.status === 200) {
+          setIsSuccessful(true);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      setIsSuccessful(false);
+    }
   }
 
   function logoutUser() {
@@ -161,6 +178,9 @@ export function Forms() {
         </div>
         <button type="submit">Cadastrar</button>
       </form>
+      {isSuccessful && (
+        <span>Morador cadastrado com sucesso!</span>
+      )}
     </div>
   );
 }

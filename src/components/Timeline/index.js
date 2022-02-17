@@ -1,14 +1,57 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Chart from 'react-apexcharts';
 
 import { FiBarChart2, FiChevronDown } from 'react-icons/fi';
 
 import './styles.scss';
 
-export function Timeline({ isTimelineVisible, setIsTimelineVisible }) {
-  function setChosenDate(e) {
-    console.log(e);
+export function Timeline({ isTimelineVisible, setIsTimelineVisible, reportType, reports }) {
+  const [orderedReports, setOrderedReports] = useState([]);
+  const [dates, setDates] = useState([]);
+  const [reportsData, setReportsData] = useState([]);
+
+  function handleDates() {
+    const datesAux = [];
+
+    for (const report of orderedReports) {
+      const formattedDate = new Date(report.data_boletim);
+      datesAux.push(formattedDate.toLocaleDateString());
+    }
+    setDates(datesAux);
   }
+
+  function handleReportsData() {
+    const reportsDataAux = [];
+
+    for (const report of orderedReports) {
+      switch (reportType) {
+        case "Casos":
+          reportsDataAux.push(report.confirmados_diarios);
+          break;
+        case "Óbitos":
+          reportsDataAux.push(report.obitos_diarios);
+          break;
+        case "Vacinados":
+          reportsDataAux.push(report.vacinados_diarios);
+          break;
+        default:
+          break;
+      }
+    }
+
+    setReportsData(reportsDataAux);
+
+  }
+
+  useEffect(() => {
+    const reportsAux = reports.sort((a, b) => {
+      return new Date(a.data_boletim) - new Date(b.data_boletim)
+    });
+    setOrderedReports(reportsAux);
+
+    handleDates();
+    handleReportsData();
+  }, [reportType, reports]);
 
   const options = {
     chart: {
@@ -25,15 +68,14 @@ export function Timeline({ isTimelineVisible, setIsTimelineVisible }) {
     },
     markers: {
       colors: ['#5A4B81'],
-      strokeColors: ['#E1E1E6'],
-      onClick: e => setChosenDate(e)
+      strokeColors: ['#E1E1E6']
     },
     stroke: {
       curve: 'straight',
       colors: ['#5A4B81']
     },
     title: {
-      text: 'Casos',
+      text: reportType ? reportType : "Sem dados",
       align: 'center',
     },
     grid: {
@@ -42,14 +84,14 @@ export function Timeline({ isTimelineVisible, setIsTimelineVisible }) {
       },
     },
     xaxis: {
-      categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999]
+      categories: dates
     }
   };
 
   const series = [
     {
-      name: "Vacinados",
-      data: [30, 40, 45, 50, 49, 60, 70, 91]
+      name: reportType,
+      data: reportsData
     }
   ];
 
@@ -63,7 +105,7 @@ export function Timeline({ isTimelineVisible, setIsTimelineVisible }) {
           options={options}
           series={series}
           type="line"
-          width="360"
+          width="480"
           className="timeline"
         />
       </div >
