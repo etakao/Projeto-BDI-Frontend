@@ -5,13 +5,13 @@ import { useUser } from '../../contexts/user';
 import { logout } from "../../services/auth";
 import moradorApi from "../../services/morador";
 import cidadeApi from "../../services/cidade";
-import vacinaApi from "../../services/vacina";
+// import vacinaApi from "../../services/vacina";
 
 import "./styles.scss";
 
 export function Forms() {
   const { user, removeUser } = useUser();
-  const [isSuccessful, setIsSuccessful] = useState(false);
+  const [isSuccessful, setIsSuccessful] = useState("");
 
   const [cities, setCities] = useState([]);
   const [admCity, setAdmCity] = useState("");
@@ -47,6 +47,12 @@ export function Forms() {
     }
   }
 
+  function reloadPage() {
+    setTimeout(() => {
+      document.location.reload();
+    }, 3000);
+  }
+
   useEffect(() => {
     loadCities();
   }, []);
@@ -67,8 +73,6 @@ export function Forms() {
   async function handleSubmit(e) {
     e.preventDefault();
 
-    console.log(dataNascimento)
-
     try {
       const response = await moradorApi.create({
         cpf,
@@ -79,21 +83,26 @@ export function Forms() {
       });
 
       if (response.status === 200) {
-        const vacinaResponse = await vacinaApi.create({
-          cpf,
-          is_vacinado: (doses > 0) ? 1 : 0,
-          numero_vacinas: parseInt(doses),
-          primeira_dose: dataDoses[0].date,
-          segunda_dose: dataDoses[1].date,
-          terceira_dose: dataDoses[2].date
-        });
-
-        if (vacinaResponse.status === 200) {
-          setIsSuccessful(true);
-        }
+        setIsSuccessful(true);
+        reloadPage();
+        // try {
+        //   const vacinaResponse = await vacinaApi.create({
+        //     cpf,
+        //     is_vacinado: (doses > 0) ? 1 : 0,
+        //     numero_vacinas: parseInt(doses),
+        //     primeira_dose: dataDoses[0].date,
+        //     segunda_dose: dataDoses[1].date,
+        //     terceira_dose: dataDoses[2].date
+        //   });
+        //   if (vacinaResponse.status === 200) {
+        //   }
+        // } catch (error) {
+        //   console.log("Vacina error:", error);
+        //   setIsSuccessful(false);
+        // }
       }
     } catch (error) {
-      console.log(error);
+      console.log("Morador error:", error);
       setIsSuccessful(false);
     }
   }
@@ -198,7 +207,10 @@ export function Forms() {
         <button type="submit">Cadastrar</button>
       </form>
       {isSuccessful && (
-        <span>Morador cadastrado com sucesso!</span>
+        <div className="success-message">
+          <span>Morador cadastrado com sucesso!</span>
+          <p>Redirecionando em 3 segundos...</p>
+        </div>
       )}
     </div>
   );

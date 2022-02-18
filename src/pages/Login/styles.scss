@@ -60,7 +60,8 @@
       button {
         height: 55px;
         background-color: var(--light-background);
-        border:none;
+        border: none;
+        border-radius: 8px;
         color: var(--text);
       }
     }
